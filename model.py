@@ -47,7 +47,7 @@ class LowDimActor(nn.Module):
         """Build an actor (policy) network that maps states -> actions."""
         x = F.relu(self.fc1(state))
         x = F.relu(self.fc2(x))
-        x = torch.tanh(self.fc3(x))
+        x = torch.sigmoid(self.fc3(x))  # TODO fix this
         return x
 
 

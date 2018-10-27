@@ -161,12 +161,13 @@ class DDPG():
         # calculate action values
         self.actor_local.eval()
         with torch.no_grad():
-            action = self.actor_local(state).cpu().data.numpy()
+            action = self.actor_local(state).cpu().data.numpy() * 6  # TODO fix this
         self.actor_local.train()
         if add_noise:
             self.noise_val = self.noise.sample() * noise_weight
             action += self.noise_val
-        return np.clip(action, -1, 1)
+        return np.clip(action, 0, 6)  # TODO fix this
+        #return action
 
 
     def reset(self):
