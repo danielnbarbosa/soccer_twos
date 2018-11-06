@@ -7,7 +7,7 @@ import torch
 import statistics
 
 
-def train(environment, agent, n_episodes=10000, max_t=1000, solve_score=0.5):
+def train(environment, agent, n_episodes=10000, max_t=1000, solve_score=100.0):
     """ Run training loop.
 
     Params
@@ -35,7 +35,7 @@ def train(environment, agent, n_episodes=10000, max_t=1000, solve_score=0.5):
                 action = agent.act(state)
             # take action in environment
 
-            #### map from3 continuous actions to 1 discrete action ####
+            #### map from 3 continuous actions to 1 discrete action ####
             # TODO clean this up
             action_tmp = action.reshape(-1, 3)
             #print('action_tmp shape: {}'.format(action_tmp.shape))
@@ -60,7 +60,7 @@ def train(environment, agent, n_episodes=10000, max_t=1000, solve_score=0.5):
             agent.step(state, action, reward, next_state, done)
             state = next_state
             rewards.append(reward)
-            if any(done):
+            if all(done):
                 break
 
         # every episode
@@ -71,12 +71,12 @@ def train(environment, agent, n_episodes=10000, max_t=1000, solve_score=0.5):
             for step in rewards:
                 per_agent_reward += step[i]
             per_agent_rewards.append(per_agent_reward)
-        stats.update(t, [np.max(per_agent_rewards)], i_episode)  # use max over all agents as episode reward
+        stats.update(t, [np.mean(per_agent_rewards)], i_episode)  # use mean over all agents as episode reward?
         stats.print_episode(i_episode, t, stats_format, buffer_len, agent.noise_weight,
-                            agent.agents[0].critic_loss, agent.agents[1].critic_loss,
-                            agent.agents[0].actor_loss, agent.agents[1].actor_loss,
-                            agent.agents[0].noise_val, agent.agents[1].noise_val,
-                            per_agent_rewards[0], per_agent_rewards[1])
+                            agent.agents[0].critic_loss, agent.agents[1].critic_loss, agent.agents[2].critic_loss, agent.agents[3].critic_loss,
+                            agent.agents[0].actor_loss, agent.agents[1].actor_loss, agent.agents[2].actor_loss, agent.agents[3].actor_loss,
+                            agent.agents[0].noise_val, agent.agents[1].noise_val, agent.agents[2].noise_val, agent.agents[3].noise_val,
+                            per_agent_rewards[0], per_agent_rewards[1], per_agent_rewards[2], per_agent_rewards[3])
 
         # every epoch (100 episodes)
         if i_episode % 100 == 0:

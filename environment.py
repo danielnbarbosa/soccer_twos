@@ -1,16 +1,19 @@
 """
 UnityML Environment.
 
-1st is red
-2nd is blue
+Agents by index:
+0: Red Goalie
+1: Blue Goalie
+2: Red Striker
+3: Blue Striker
 
-GoalieBrain:
+GoalieBrain actions:
 0: forward
 1: backward
 2: slide right
 3: slide left
 
-StrikerBrain:
+StrikerBrain actions:
 0: forward
 1: backward
 2: spin right (clockwise)
@@ -18,7 +21,10 @@ StrikerBrain:
 4: slide left
 5: slide right
 
-Accepts range of values, e.g. between [0 and 1) for forward.
+Brain accepts range of values, e.g. between [0 and 1) for forward.
+
+
+
 """
 
 import platform
