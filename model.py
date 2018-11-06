@@ -47,7 +47,7 @@ class LowDimActor(nn.Module):
         """Build an actor (policy) network that maps states -> actions."""
         x = F.relu(self.fc1(state))
         x = F.relu(self.fc2(x))
-        x = torch.sigmoid(self.fc3(x))  # TODO fix this
+        x = torch.tanh(self.fc3(x))
         return x
 
 
@@ -79,6 +79,8 @@ class LowDimCritic(nn.Module):
     def forward(self, states, actions):
         """Build a critic (value) network that maps (states, actions) pairs -> Q-values."""
         xs = torch.cat((states, actions), dim=1)
+        #print('states: {}'.format(states.shape))
+        #print('actions: {}'.format(actions.shape))
         x = F.relu(self.fc1(xs))
         x = F.relu(self.fc2(x))
         x = self.fc3(x)
@@ -93,7 +95,7 @@ class LowDim2x():
     Local and target models initialized with identical weights by using same seed.
     """
 
-    def __init__(self, n_agents, state_size=336, action_size=1, seed=0):
+    def __init__(self, n_agents, state_size=336, action_size=3, seed=0):
         """
         Params
         ======

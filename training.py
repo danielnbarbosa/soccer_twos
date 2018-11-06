@@ -34,7 +34,28 @@ def train(environment, agent, n_episodes=10000, max_t=1000, solve_score=0.5):
             else:
                 action = agent.act(state)
             # take action in environment
-            next_state, reward, done = environment.step(action)
+
+            #### map from3 continuous actions to 1 discrete action ####
+            # TODO clean this up
+            action_tmp = action.reshape(-1, 3)
+            #print('action_tmp shape: {}'.format(action_tmp.shape))
+            #print('action_tmp: {}'.format(action_tmp))
+            idx = np.argmax(np.abs(action_tmp), axis=1)
+            #print('idx: {}'.format(idx))
+            env_action = []
+            for i in range(len(idx)):
+                is_neg = action_tmp[i][idx[i]] < 0
+                #print('i, is_neg: {} {}'.format(i, is_neg))
+                if idx[i] == 0 and is_neg == False: env_action.append(0)
+                if idx[i] == 0 and is_neg == True: env_action.append(1)
+                if idx[i] == 1 and is_neg == False: env_action.append(2)
+                if idx[i] == 1 and is_neg == True: env_action.append(3)
+                if idx[i] == 2 and is_neg == False: env_action.append(4)
+                if idx[i] == 2 and is_neg == True: env_action.append(5)
+            env_action = np.array(env_action)
+            #print('env_action: {}'.format(env_action))
+
+            next_state, reward, done = environment.step(env_action)
             # update agent with returned information
             agent.step(state, action, reward, next_state, done)
             state = next_state

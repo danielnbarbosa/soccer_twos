@@ -17,7 +17,7 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 class MADDPG():
     """Meta agent that contains the two DDPG agents and shared replay buffer."""
 
-    def __init__(self, action_size=1, seed=0, load_file=None,
+    def __init__(self, action_size=3, seed=0, load_file=None,
                  n_agents=4,
                  buffer_size=int(3e4),
                  batch_size=128,
@@ -117,7 +117,7 @@ class MADDPG():
 class DDPG():
     """DDPG agent with own actor and critic."""
 
-    def __init__(self, id, model, action_size=1, seed=0, load_file=None,
+    def __init__(self, id, model, action_size=3, seed=0, load_file=None,
                  tau=1e-3,
                  lr_actor=1e-4,
                  lr_critic=1e-3,
@@ -161,13 +161,13 @@ class DDPG():
         # calculate action values
         self.actor_local.eval()
         with torch.no_grad():
-            action = self.actor_local(state).cpu().data.numpy() * 6  # TODO fix this
+            action = self.actor_local(state).cpu().data.numpy()
         self.actor_local.train()
         if add_noise:
             self.noise_val = self.noise.sample() * noise_weight
             action += self.noise_val
-        return np.clip(action, 0, 6)  # TODO fix this
-        #return action
+        #return np.clip(action, -1, 1)
+        return action
 
 
     def reset(self):
