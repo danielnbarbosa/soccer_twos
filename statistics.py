@@ -100,7 +100,8 @@ class Stats():
         self.writer.add_scalar('striker_blue/reward', rewards_3, i_episode)
         # DEBUG rewards for each agent
         print('')
-        print('{:.3f} {:.3f} {:.3f} {:.3f}'.format(rewards_0, rewards_1, rewards_2, rewards_3))
+        n_secs = int(time.time() - self.time_start)
+        print('RG: {:.3f}   BG: {:.3f}   RS: {:.3f}   BS: {:.3f}   | Secs: {:6}'.format(rewards_0, rewards_1, rewards_2, rewards_3, n_secs))
 
     def print_epoch(self, i_episode, stats_format, *args):
         n_secs = int(time.time() - self.time_start)

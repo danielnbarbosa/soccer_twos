@@ -35,24 +35,20 @@ def train(environment, agent, n_episodes=10000, max_t=1000, solve_score=100.0):
                 action = agent.act(state)
             # take action in environment
 
-            #### map from 3 continuous actions to 1 discrete action ####
-            # TODO clean this up
-            action_tmp = action.reshape(-1, 3)
-            #print('action_tmp shape: {}'.format(action_tmp.shape))
-            #print('action_tmp: {}'.format(action_tmp))
-            idx = np.argmax(np.abs(action_tmp), axis=1)
+            # map from 3 continuous actions to 1 discrete action
+            action_tmp = action.reshape(4, 3)  # reshape 1x12 dim to 4x3 dim (each of the 4 agents has 3 actions)
+            idx = np.argmax(np.abs(action_tmp), axis=1) # pick the largest absolute value for each agent
+            is_negative = action_tmp[np.arange(4), idx] < 0 # True if the action value is negative else False
+            env_action = (idx * 2) + is_negative # map from continuous action to discrete action
+            # network outputs 3 continuous values
+            # first value maps to 0,1 (forward, backward)
+            # second value maps to 2,3 (spin right, spin left)
+            # third value maps to 4,5 (slide left, slide right)
+            # largest absolute value is the action chosen
+            # mapping only happens here for passing action to environment
+            # DEBUG action mapping
+            #print('is_negative: {}'.format(is_negative))
             #print('idx: {}'.format(idx))
-            env_action = []
-            for i in range(len(idx)):
-                is_neg = action_tmp[i][idx[i]] < 0
-                #print('i, is_neg: {} {}'.format(i, is_neg))
-                if idx[i] == 0 and is_neg == False: env_action.append(0)
-                if idx[i] == 0 and is_neg == True: env_action.append(1)
-                if idx[i] == 1 and is_neg == False: env_action.append(2)
-                if idx[i] == 1 and is_neg == True: env_action.append(3)
-                if idx[i] == 2 and is_neg == False: env_action.append(4)
-                if idx[i] == 2 and is_neg == True: env_action.append(5)
-            env_action = np.array(env_action)
             #print('env_action: {}'.format(env_action))
 
             next_state, reward, done = environment.step(env_action)
