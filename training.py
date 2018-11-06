@@ -71,7 +71,7 @@ def train(environment, agent, n_episodes=10000, max_t=1000, solve_score=100.0):
             for step in rewards:
                 per_agent_reward += step[i]
             per_agent_rewards.append(per_agent_reward)
-        stats.update(t, [np.mean(per_agent_rewards)], i_episode)  # use mean over all agents as episode reward?
+        stats.update(t, [np.mean((per_agent_rewards[0], per_agent_rewards[2]))], [np.mean((per_agent_rewards[1], per_agent_rewards[3]))], i_episode)  # track mean rewards for red and blue
         stats.print_episode(i_episode, t, stats_format, buffer_len, agent.noise_weight,
                             agent.agents[0].critic_loss, agent.agents[1].critic_loss, agent.agents[2].critic_loss, agent.agents[3].critic_loss,
                             agent.agents[0].actor_loss, agent.agents[1].actor_loss, agent.agents[2].actor_loss, agent.agents[3].actor_loss,
