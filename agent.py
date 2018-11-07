@@ -19,7 +19,7 @@ class MADDPG():
 
     def __init__(self, action_size=3, seed=0, load_file=None,
                  n_agents=4,
-                 buffer_size=int(3e4),
+                 buffer_size=int(1e5),
                  batch_size=128,
                  gamma=0.99,
                  update_every=2,

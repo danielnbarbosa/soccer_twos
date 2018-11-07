@@ -105,7 +105,7 @@ class Stats():
 
     def print_epoch(self, i_episode, stats_format, *args):
         n_secs = int(time.time() - self.time_start)
-        common_stats = 'Episode: {:5}   Avg: {:8.3f}   BestAvg: {:8.3f}   σ: {:8.3f}  |  Steps: {:8}   Secs: {:6}      |  '.format(i_episode, self.avg_score, self.best_avg_score, self.std_dev, self.total_steps, n_secs)
+        common_stats = 'Episode: {:5}   Avg: {:8.3f}   BestAvg: {:8.3f}   σ: {:8.3f}  |  Steps: {:8}   Secs: {:6}      |  '.format(i_episode, self.red_avg_score, self.red_best_avg_score, self.red_std_dev, self.total_steps, n_secs)
         print('\r' + common_stats + stats_format.format(*args))
 
     def print_solve(self, i_episode, stats_format, *args):
