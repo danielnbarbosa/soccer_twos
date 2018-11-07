@@ -58,7 +58,7 @@ class UnityMLVectorMultiAgent():
         """Take a step in the environment."""
         actions = action.reshape(2, 2)
         action = {'GoalieBrain': actions[0], 'StrikerBrain': actions[1]}
-        #action = {'GoalieBrain': [-1, -1], 'StrikerBrain': [6, 6]}
+        #action = {'GoalieBrain': [5, 5], 'StrikerBrain': [2, 2]}
         #print(action)
         info = self.env.step(action)
 

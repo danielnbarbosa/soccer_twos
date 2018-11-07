@@ -6,8 +6,7 @@ import numpy as np
 import torch
 import statistics
 
-
-def train(environment, agent, n_episodes=10000, max_t=1000, solve_score=100.0):
+def train(environment, agent, n_episodes=1000000, max_t=1000, solve_score=100.0):
     """ Run training loop.
 
     Params
@@ -50,7 +49,7 @@ def train(environment, agent, n_episodes=10000, max_t=1000, solve_score=100.0):
             #print('is_negative: {}'.format(is_negative))
             #print('idx: {}'.format(idx))
             #print('env_action: {}'.format(env_action))
-
+            # env_action = np.random.random_sample(4) * 5  # DEBUG take random actions
             next_state, reward, done = environment.step(env_action)
             # update agent with returned information
             agent.step(state, action, reward, next_state, done)
