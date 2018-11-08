@@ -49,7 +49,17 @@ def train(environment, agent, n_episodes=1000000, max_t=1000, solve_score=100.0)
             #print('is_negative: {}'.format(is_negative))
             #print('idx: {}'.format(idx))
             #print('env_action: {}'.format(env_action))
-            # env_action = np.random.random_sample(4) * 5  # DEBUG take random actions
+
+            #random_actions = np.random.random_sample(4) * 5
+            #env_action = random_actions  # DEBUG both teams take random actions
+            #env_action = np.array((random_actions[0], env_action[1], random_actions[2], env_action[3]))  # DEBUG +1B only red team takes random actions
+            #env_action = np.array((env_action[0], env_action[1], random_actions[2], env_action[3]))      # DEBUG +2B only red striker takes random actions
+            #env_action = np.array((env_action[0], random_actions[1], random_actions[2], env_action[3]))  # DEBUG +3B red striker and blue goalie take random actions
+            #env_action = np.array((env_action[0], random_actions[1], env_action[2], random_actions[3]))  # DEBUG +1R only blue team takes random actions
+            #env_action = np.array((env_action[0], env_action[1], env_action[2], random_actions[3]))      # DEBUG +2R only blue striker takes random actions
+            #env_action = np.array((random_actions[0], env_action[1], env_action[2], random_actions[3]))  # DEBUG +3R blue striker and red goalie take random actions
+            #print('env_action: {}'.format(env_action))
+
             next_state, reward, done = environment.step(env_action)
             # update agent with returned information
             agent.step(state, action, reward, next_state, done)
