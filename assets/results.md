@@ -3,9 +3,9 @@ Based on what I've observed I think having a random goalie is actually better th
 This is affecting the strikers as well as they are learning strategies that work against dumb goalies.  For instance, they often boot the ball straight ahead at the start of a game, which works well when the goalies just sit off to the side.
 
 Based on this I'm assigning an advantage rating to the different combinations as follows:
-+1 if your team has [trained striker, trained goalie] and opposing team has [random striker, random goalie].  strong, weak   vs weak, strong
-+2 if your team has [trained striker, trained goalie] and opposing team has [random striker, trained goalie]. strong, weak   vs weak, weak
-+3 if your team has [trained striker, random goalie]  and opposing team has [random striker, trained goalie]. strong, strong vs weak, weak
+- +1 if your team has [trained striker, trained goalie] and opposing team has [random striker, random goalie].  strong, weak   vs weak, strong
+- +2 if your team has [trained striker, trained goalie] and opposing team has [random striker, trained goalie]. strong, weak   vs weak, weak
+- +3 if your team has [trained striker, random goalie]  and opposing team has [random striker, trained goalie]. strong, strong vs weak, weak
 
 Here are the results.  The main takeaway is that the team with the training advantage consistently beat the other team.
 ```
