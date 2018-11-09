@@ -19,7 +19,7 @@ class MADDPG():
 
     def __init__(self, action_size=3, seed=0, load_file=None,
                  n_agents=4,
-                 buffer_size=int(1e5),
+                 buffer_size=int(2e5),
                  batch_size=128,
                  gamma=0.99,
                  update_every=2,
@@ -242,7 +242,7 @@ class DDPG():
 class OUNoise:
     """Ornstein-Uhlenbeck process."""
 
-    def __init__(self, size, seed, mu=0., theta=0.15, sigma=0.2):
+    def __init__(self, size, seed, mu=0., theta=0.15, sigma=0.1):
         """Initialize parameters and noise process."""
         random.seed(seed)
         np.random.seed(seed)
