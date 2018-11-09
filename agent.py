@@ -51,12 +51,15 @@ class MADDPG():
         self.noise_decay = noise_decay
         self.t_step = 0
         self.evaluation_only = evaluation_only
-        # create two agents, each with their own actor and critic
-        models = [model.LowDim2x(n_agents=n_agents) for _ in range(n_agents)]
-        self.agents = [DDPG(0, models[0], load_file=None),
-                       DDPG(1, models[1], load_file=None),
-                       DDPG(2, models[2], load_file=None),
-                       DDPG(3, models[3], load_file=None)]
+        # create four agents, each with their own actor and critic
+        models = [model.LowDim2x(n_agents=n_agents, action_size=2),  # red goalie
+                  model.LowDim2x(n_agents=n_agents, action_size=2),  # blue goalie
+                  model.LowDim2x(n_agents=n_agents, action_size=3),  # red striker
+                  model.LowDim2x(n_agents=n_agents, action_size=3)]  # blue striker
+        self.agents = [DDPG(0, models[0], action_size=2, load_file=None),
+                       DDPG(1, models[1], action_size=2, load_file=None),
+                       DDPG(2, models[2], action_size=3, load_file=None),
+                       DDPG(3, models[3], action_size=3, load_file=None)]
         # create shared replay buffer
         self.memory = ReplayBuffer(action_size, self.buffer_size, self.batch_size, seed)
         if load_file:
@@ -90,7 +93,7 @@ class MADDPG():
             action = agent.act(state, noise_weight=self.noise_weight, add_noise=True)
             self.noise_weight *= self.noise_decay
             all_actions.append(action)
-        return np.array(all_actions).reshape(1, -1) # reshape 2x2 into 1x4 dim vector
+        return np.concatenate(all_actions).reshape(1, -1) # flatten vector into 1d
 
     def learn(self, experiences, gamma):
         # each agent uses it's own actor to calculate next_actions

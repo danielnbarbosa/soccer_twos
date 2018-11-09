@@ -48,6 +48,7 @@ class LowDimActor(nn.Module):
         x = F.relu(self.fc1(state))
         x = F.relu(self.fc2(x))
         x = torch.tanh(self.fc3(x))
+        #print('x: {}'.format(x.shape))
         return x
 
 
@@ -106,7 +107,7 @@ class LowDim2x():
         """
         self.actor_local = LowDimActor(state_size, action_size, seed).to(device)
         self.actor_target = LowDimActor(state_size, action_size, seed).to(device)
-        critic_input_size = (state_size+action_size)*n_agents
+        critic_input_size = state_size*n_agents + 10  # TODO paramaterize this
         self.critic_local = LowDimCritic(critic_input_size, seed).to(device)
         self.critic_target = LowDimCritic(critic_input_size, seed).to(device)
         # output model architecture

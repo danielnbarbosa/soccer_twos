@@ -34,30 +34,31 @@ def train(environment, agent, n_episodes=1000000, max_t=1000, solve_score=100.0)
                 action = agent.act(state)
             # take action in environment
 
-            # map from 3 continuous actions to 1 discrete action
-            action_tmp = action.reshape(4, 3)  # reshape 1x12 dim to 4x3 dim (each of the 4 agents has 3 actions)
-            idx = np.argmax(np.abs(action_tmp), axis=1) # pick the largest absolute value for each agent
-            is_negative = action_tmp[np.arange(4), idx] < 0 # True if the action value is negative else False
-            env_action = (idx * 2) + is_negative # map from continuous action to discrete action
-            # network outputs 3 continuous values
-            # first value maps to 0,1 (forward, backward)
-            # second value maps to 2,3 (spin right, spin left)
-            # third value maps to 4,5 (slide left, slide right)
-            # largest absolute value is the action chosen
-            # mapping only happens here for passing action to environment
+            # map from continuous actions to discrete actions, largest absolute value is the action chosen
+            action = action.squeeze(0)
+            action_tmp = [action[0:2], action[2:4], action[4:7], action[7:10]]
+            env_action = []
+            for a in action_tmp:
+                idx = np.argmax(np.abs(a))  # pick the largest absolute value for each agent
+                is_negative = a[idx] < 0   # True if the action value is negative else False
+                env_action.append((idx * 2) + is_negative)  # map from continuous action to discrete action
+            env_action = np.array(env_action)
+            #print('env_action: {}'.format(env_action))
+
             # DEBUG action mapping
             #print('is_negative: {}'.format(is_negative))
             #print('idx: {}'.format(idx))
             #print('env_action: {}'.format(env_action))
 
+            # DEBUG playing against random agents
             #random_actions = np.random.random_sample(4) * 5
-            #env_action = random_actions  # DEBUG both teams take random actions
-            #env_action = np.array((random_actions[0], env_action[1], random_actions[2], env_action[3]))  # DEBUG +1B only red team takes random actions
-            #env_action = np.array((env_action[0], env_action[1], random_actions[2], env_action[3]))      # DEBUG +2B only red striker takes random actions
-            #env_action = np.array((env_action[0], random_actions[1], random_actions[2], env_action[3]))  # DEBUG +3B red striker and blue goalie take random actions
-            #env_action = np.array((env_action[0], random_actions[1], env_action[2], random_actions[3]))  # DEBUG +1R only blue team takes random actions
-            #env_action = np.array((env_action[0], env_action[1], env_action[2], random_actions[3]))      # DEBUG +2R only blue striker takes random actions
-            #env_action = np.array((random_actions[0], env_action[1], env_action[2], random_actions[3]))  # DEBUG +3R blue striker and red goalie take random actions
+            #env_action = random_actions  # both teams take random actions
+            #env_action = np.array((random_actions[0], env_action[1], random_actions[2], env_action[3]))  # +1B only red team takes random actions
+            #env_action = np.array((env_action[0], env_action[1], random_actions[2], env_action[3]))      # +2B only red striker takes random actions
+            #env_action = np.array((env_action[0], random_actions[1], random_actions[2], env_action[3]))  # +3B red striker and blue goalie take random actions
+            #env_action = np.array((env_action[0], random_actions[1], env_action[2], random_actions[3]))  # +1R only blue team takes random actions
+            #env_action = np.array((env_action[0], env_action[1], env_action[2], random_actions[3]))      # +2R only blue striker takes random actions
+            #env_action = np.array((random_actions[0], env_action[1], env_action[2], random_actions[3]))  # +3R blue striker and red goalie take random actions
             #print('env_action: {}'.format(env_action))
 
             next_state, reward, done = environment.step(env_action)
